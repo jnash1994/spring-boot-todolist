@@ -6,6 +6,8 @@ import nash.example.todolist.model.entity.Todo;
 import nash.example.todolist.service.TodoService;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,7 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 //整合測試 H2資料庫
-class TodoControllerTest {
+public class TodoControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
@@ -34,9 +37,11 @@ class TodoControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
+    private static final Logger logger = LoggerFactory.getLogger(TodoControllerTest.class);
     @Transactional
     @Test
     public void testGetTodos() throws Exception {
+        log("Get起");
         String strDate = "2020-09-20 19:00:00";
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = format.parse(strDate);
@@ -60,6 +65,7 @@ class TodoControllerTest {
         });
         // [Assert] 判定回傳的body是否跟預期的一樣
         assertEquals(expectedList,  actualList);
+        log("Get尾");
     }
     @Transactional
     @Test
@@ -82,6 +88,7 @@ class TodoControllerTest {
     @Transactional
     @Test
     public void testUpdateTodoSuccess() throws Exception {
+        log("Update起");
         JSONObject todoObject = new JSONObject();
         todoObject.put("status", 2);
 
@@ -90,6 +97,7 @@ class TodoControllerTest {
                         .contentType(MediaType.APPLICATION_JSON) // request 設定型別
                         .content(String.valueOf(todoObject))) // body 內容
                 .andExpect(status().isOk()); // [Assert] 預期回應的status code 為 200(OK)
+        log("Update尾");
     }
     @Transactional
     @Test
@@ -102,6 +110,7 @@ class TodoControllerTest {
                         .contentType(MediaType.APPLICATION_JSON) // request 設定型別
                         .content(String.valueOf(todoObject))) // body 內容
                 .andExpect(status().isBadRequest()); // [Assert] 預期回應的status code 為 400(Bad Request)
+
     }
     @Transactional
     @Test
@@ -118,6 +127,25 @@ class TodoControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/todos/100")
                         .contentType(MediaType.APPLICATION_JSON)) // request 設定型別
                 .andExpect(status().isBadRequest()); // [Assert] 預期回應的status code 為 400(Bad Request)
+    }
+    private void log(String s) {
+        Iterator<Todo> tt = todoService.getTodos().iterator();
+        while (true) {
+            if (tt.hasNext()) {
+                Todo tr = tt.next();
+                logger.warn("整合測試"+s+"   "+tr.getTask());
+                logger.warn("整合測試"+s+"   "+tr.getId().toString());
+                logger.warn("整合測試"+s+"   "+tr.getUpdateTime().toString());
+                logger.warn("整合測試"+s+"   "+tr.getCreateTime().toString());
+                logger.warn("整合測試"+s+"   "+tr.getStatus().toString());
+                logger.warn("---------------------------------");
+                logger.warn("                                              ");
+            } else {
+                logger.warn ("整合測試"+s+"   "+"空的@@@@@@@@@@@@@@");
+                break;
+            }
+        }
+
     }
 
 }

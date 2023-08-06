@@ -1,5 +1,9 @@
 package nash.example.todolist.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import nash.example.todolist.model.entity.Todo;
 import nash.example.todolist.service.TodoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +15,22 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@Api(tags = "Todo list 相關api")
 @RestController
 @RequestMapping("/api")
 public class TodoController {
     @Autowired
     TodoService todoService;
+
+
+    @ApiOperation("取得所有代辦事項列表")
+    @ApiResponses({
+            @ApiResponse(code=401,message="沒有權限"),
+            @ApiResponse(code=404,message="找不到路徑")
+    })
+
+
+
 
     @GetMapping("/todos")
     public ResponseEntity getTodos() {

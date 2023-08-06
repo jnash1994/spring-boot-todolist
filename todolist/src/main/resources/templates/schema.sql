@@ -1,7 +1,0 @@
-CREATE TABLE todo (
-id INT  PRIMARY KEY AUTO_INCREMENT ,
-task VARCHAR(50),
-status INT,
-createTime TIMESTAMP,
-updateTime TIMESTAMP
-);
