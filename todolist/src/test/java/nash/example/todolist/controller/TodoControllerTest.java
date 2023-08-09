@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nash.example.todolist.model.entity.Todo;
 import nash.example.todolist.service.TodoService;
+import org.hibernate.annotations.SQLDelete;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,8 +35,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class TodoControllerTest {
     @Autowired
     private MockMvc mockMvc;
+
     @Autowired
     TodoService todoService;
+
     @Autowired
     ObjectMapper objectMapper;
 
@@ -87,6 +92,7 @@ public class TodoControllerTest {
     }
     @Transactional
     @Test
+    //@Disabled
     public void testUpdateTodoSuccess() throws Exception {
         log("Update起");
         JSONObject todoObject = new JSONObject();

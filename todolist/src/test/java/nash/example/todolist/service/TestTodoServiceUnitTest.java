@@ -2,6 +2,7 @@ package nash.example.todolist.service;
 
 import nash.example.todolist.model.dao.TodoDao;
 import nash.example.todolist.model.entity.Todo;
+import nash.example.todolist.service.TodoService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;

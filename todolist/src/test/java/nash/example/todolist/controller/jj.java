@@ -19,24 +19,22 @@ public class jj {
     private static final Logger logger = LoggerFactory.getLogger(jj.class);
     @Test
     public void findAll(){
-        log("findAll()");
+        log(" JJ findAll()");
 
 }
 @Test
 @Transactional
 public void createTodo(){
-
+    log(" JJ createTodo 起!!!!!!!!!!!!!!!");
         Todo todo=new Todo();
         todo.setTask("拖地");
         Integer num=todoService.createTodo(todo);
-        log("createTodo");
+        log(" JJ createTodo 尾!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
     }
     @Test
     public void findAllAgain(){
-       log("findAllAgain");
-
-
+       log("JJ findAllAgain");
     }
     private void log(String s){
         Iterator<Todo> tt=todoService.getTodos().iterator();

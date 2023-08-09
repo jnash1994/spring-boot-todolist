@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import nash.example.todolist.model.entity.Todo;
 import nash.example.todolist.service.TodoService;
 import org.json.JSONObject;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+
 public class TestTodoControllerUnitTest {
     @Autowired
     private MockMvc mockMvc;
@@ -39,10 +41,10 @@ public class TestTodoControllerUnitTest {
 
     private static final Logger logger = LoggerFactory.getLogger(TestTodoControllerUnitTest.class);
 
-    @Transactional
+
     @Test
     public void testGetTodos() throws Exception {
-
+        log("Get起");
         // 設定資料
         List<Todo> expectedList = new ArrayList();
         Todo todo = new Todo();
@@ -51,26 +53,26 @@ public class TestTodoControllerUnitTest {
         expectedList.add(todo);
 
         // 模擬todoService.getTodos() 回傳 expectedList
-        Mockito.when(todoService.getTodos()).thenReturn(expectedList);
+       Mockito.when(todoService.getTodos()).thenReturn(expectedList);
 
         // 模擬呼叫[GET] /api/todos
         String returnString = mockMvc.perform(MockMvcRequestBuilders.get("/api/todos")
-                        .accept(MediaType.APPLICATION_JSON ))
-                .andExpect(status().isOk())
-                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+                      .accept(MediaType.APPLICATION_JSON ))
+               .andExpect(status().isOk())
+               .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
 
         Iterable<Todo> actualList = objectMapper.readValue(returnString, new TypeReference<Iterable<Todo>>() {
         });
 
         // 判定回傳的body是否跟預期的一樣
         assertEquals(expectedList, actualList);
-        //log("Get");
+        log("Get尾");
     }
 
 
     @Test
     public void testrCreateTodo() throws Exception {
-        //log("Create");
+        log("Create起");
         // 設定資料
         Todo mockTodo = new Todo();
         mockTodo.setId(2);
@@ -90,8 +92,8 @@ public class TestTodoControllerUnitTest {
                         .contentType(MediaType.APPLICATION_JSON) // request 設定型別
                         .content(String.valueOf(todoObject))) // body 內容
                 .andExpect(status().isCreated()) // 預期回應的status code 為 201(Created)
-                .andReturn().getResponse().getContentAsString();
-        log("Create");
+               .andReturn().getResponse().getContentAsString();
+        log("Create尾");
     }
     @Transactional
     @Test
